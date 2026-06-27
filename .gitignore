@@ -23,6 +23,8 @@ env/
 .env
 .venv/
 
+
+
 # Django
 *.log
 local_settings.py
