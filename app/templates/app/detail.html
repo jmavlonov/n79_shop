@@ -1,0 +1,464 @@
+{%load static%}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Shop Item - Start Bootstrap Template</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="{% static 'app/css/styles.css'%}" rel="stylesheet" />
+        <!-- Star rating & image upload styles -->
+        <style>
+            /* Star rating */
+            .star-rating {
+                display: inline-flex;
+                flex-direction: row-reverse;
+                justify-content: flex-end;
+                gap: 4px;
+                font-size: 1.8rem;
+            }
+            .star-rating input {
+                display: none;
+            }
+            .star-rating label {
+                color: #ddd;
+                cursor: pointer;
+                transition: color 0.2s ease-in-out;
+                margin: 0;
+            }
+            .star-rating input:checked ~ label,
+            .star-rating label:hover,
+            .star-rating label:hover ~ label {
+                color: #ffc107;
+            }
+
+            /* Image upload */
+            .image-upload-box {
+                border: 2px dashed #ced4da;
+                border-radius: 8px;
+                padding: 24px;
+                text-align: center;
+                cursor: pointer;
+                color: #6c757d;
+                transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+            }
+            .image-upload-box:hover {
+                border-color: #198754;
+                background-color: #f8f9fa;
+            }
+            .image-upload-box i {
+                font-size: 2rem;
+                display: block;
+                margin-bottom: 8px;
+            }
+            .image-upload-box input[type="file"] {
+                display: none;
+            }
+            .image-preview {
+                display: none;
+                margin-top: 12px;
+            }
+            .image-preview img {
+                max-width: 100%;
+                max-height: 200px;
+                border-radius: 8px;
+                object-fit: cover;
+            }
+
+            /* Comments list */
+            .comments-section {
+                max-width: 760px;
+                margin: 0 auto;
+            }
+            .comments-title {
+                font-weight: 700;
+                margin-bottom: 1.75rem;
+            }
+            .comments-title .count {
+                color: #198754;
+            }
+            .comment-card {
+                background: #fff;
+                border: 1px solid #eef0f2;
+                border-radius: 14px;
+                padding: 1.25rem 1.5rem;
+                margin-bottom: 1rem;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+                transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
+            }
+            .comment-card:hover {
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+                transform: translateY(-2px);
+            }
+            .comment-header {
+                display: flex;
+                align-items: center;
+                gap: 0.85rem;
+            }
+            .comment-avatar {
+                flex: 0 0 auto;
+                width: 46px;
+                height: 46px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #198754, #20c997);
+                color: #fff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 600;
+                font-size: 1.1rem;
+                text-transform: uppercase;
+            }
+            .comment-meta {
+                display: flex;
+                flex-direction: column;
+                line-height: 1.2;
+            }
+            .comment-name {
+                font-weight: 600;
+                font-size: 1rem;
+                margin: 0;
+                color: #212529;
+            }
+            .comment-email {
+                font-size: 0.82rem;
+                color: #8a929b;
+            }
+            .comment-rating {
+                margin-left: auto;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.3rem;
+                background: #fff8e6;
+                color: #d39e00;
+                font-weight: 600;
+                font-size: 0.85rem;
+                padding: 0.25rem 0.6rem;
+                border-radius: 999px;
+            }
+            .comment-rating .bi {
+                color: #ffc107;
+            }
+            .comment-message {
+                margin: 0.9rem 0 0.6rem;
+                color: #495057;
+                line-height: 1.6;
+            }
+            .comment-date {
+                font-size: 0.78rem;
+                color: #adb5bd;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.35rem;
+            }
+            .comments-empty {
+                text-align: center;
+                color: #adb5bd;
+                padding: 2.5rem 1rem;
+                border: 1px dashed #dee2e6;
+                border-radius: 14px;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container px-4 px-lg-5">
+                <a class="navbar-brand" href="{% url 'home' %}">Apelsin</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#!">All Products</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="#!">Popular Items</a></li>
+                                <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <form class="d-flex">
+                        <input type="text" class="form-contro">
+                        <button class="btn btn-outline-dark" type="submit">
+                            <i class="bi-search-fill me-1"></i>
+                            Search
+                           
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+        <!-- Product section-->
+        <section class="py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="row gx-4 gx-lg-5 align-items-center">
+                    <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="{{product.get_image_path}}" alt="..." /></div>
+                    <div class="col-md-6">
+                        <div class="small mb-1">Stock : {{product.stock}} </div>
+                        <h1 class="display-5 fw-bolder">{{product.name}}</h1>
+                        <div class="fs-5 mb-5">
+                            {% if product.discount %}
+                                <span class="text-muted text-decoration-line-through">{{product.price}}</span>
+                                    {{product.discounted_price}}
+                            {%else%}
+                                    {{product.price}}
+                            {%endif%}
+                        </div>
+                        <p class="lead">{{product.description}}</p>
+                        <div class="d-flex">
+                            <form>
+                                <div class="form-group">
+                                    <h2>Place an order</h2>
+                                </div>
+                                <div class="form-group mb-3">
+                                  <label for="formGroupExampleInput">Your name</label>
+                                  <input type="text" class="form-control"  placeholder="Your name">
+                                </div>
+                                <div class="form-group mb-3">
+                                  <label for="formGroupExampleInput2">Your phone</label>
+                                  <input type="text" class="form-control" placeholder="Your phone">
+                                </div>
+        
+                               
+        
+                                  <div class="form-group mb-3">
+                                   
+                                    <input type="text" class="btn btn-success" value="Send">
+                                  </div>
+                              </form>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="container mt-4 mb-4">
+            <div class="row">
+                <div class="col-12">
+                    <div class="comments-section">
+                        <h2 class="comments-title text-center">
+                            Latest comments
+                            <span class="count">({{product.comments.count}})</span>
+                        </h2>
+
+                        {% for comment in product.comments.all %}
+                            <div class="comment-card">
+                                <div class="comment-header">
+                                    <div class="comment-avatar">{{ comment.name|first }}</div>
+                                    <div class="comment-meta">
+                                        <p class="comment-name">{{ comment.name }}</p>
+                                        <span class="comment-email">{{ comment.email }}</span>
+                                    </div>
+                                    <span class="comment-rating">
+                                        <i class="bi bi-star-fill"></i>{{ comment.rating }}
+                                    </span>
+                                </div>
+                                <p class="comment-message">{{ comment.message }}</p>
+                                <span class="comment-date">
+                                    <i class="bi bi-clock"></i>{{ comment.created_at }}
+                                </span>
+                            </div>
+                        {% empty %}
+                            <div class="comments-empty">
+                                <i class="bi bi-chat-dots fs-3 d-block mb-2"></i>
+                                No comments yet. Be the first to share your thoughts!
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="col-8 offset-2 mt-5">
+                   
+                    <div class=" p-5">
+                        <div class="text-center">
+                            <h3>Add Comment</h3>
+                        </div>
+                    
+                    <form>
+                        <div class="form-group mb-3">
+                          <label for="formGroupExampleInput">Your name</label>
+                          <input type="text" class="form-control"  placeholder="Your name">
+                        </div>
+                        <div class="form-group mb-3">
+                          <label for="formGroupExampleInput2">Your email</label>
+                          <input type="text" class="form-control" placeholder="Your email">
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="formGroupExampleInput2">Your comment</label>
+                           <textarea name="" class="form-control" id="" cols="30" rows="10"></textarea>
+                          </div>
+
+                        <div class="form-group mb-3">
+                            <label class="d-block">Your rating</label>
+                            <div class="star-rating">
+                                <input type="radio" id="star5" name="rating" value="5"><label for="star5"><i class="bi bi-star-fill"></i></label>
+                                <input type="radio" id="star4" name="rating" value="4"><label for="star4"><i class="bi bi-star-fill"></i></label>
+                                <input type="radio" id="star3" name="rating" value="3"><label for="star3"><i class="bi bi-star-fill"></i></label>
+                                <input type="radio" id="star2" name="rating" value="2"><label for="star2"><i class="bi bi-star-fill"></i></label>
+                                <input type="radio" id="star1" name="rating" value="1"><label for="star1"><i class="bi bi-star-fill"></i></label>
+                            </div>
+                          </div>
+
+                        <div class="form-group mb-3">
+                            <label class="d-block">Add a photo</label>
+                            <label for="commentImage" class="image-upload-box w-100">
+                                <i class="bi bi-cloud-arrow-up"></i>
+                                <span>Click to upload an image</span>
+                                <input type="file" id="commentImage" accept="image/*" onchange="previewCommentImage(event)">
+                            </label>
+                            <div class="image-preview" id="imagePreview">
+                                <img id="imagePreviewImg" src="" alt="Preview">
+                            </div>
+                          </div>
+
+                          <div class="form-group mb-3">
+
+                            <input type="text" class="btn btn-success" value="Send">
+                          </div>
+                      </form>
+
+                    </div>
+                      
+                </div>
+            </div>
+        </div>
+        <!-- Related items section-->
+        <section class="py-5 bg-light">
+            <div class="container px-4 px-lg-5 mt-5">
+                <h2 class="fw-bolder mb-4">Related products</h2>
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top" 
+                            src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">Fancy Product</h5>
+                                    <!-- Product price-->
+                                    $40.00 - $80.00
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="detail.html">View product</a></div>
+
+                        
+                            </div>
+                        </div>
+                    </div>
+
+                  
+
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top" 
+                            src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">Fancy Product</h5>
+                                    <!-- Product price-->
+                                    $40.00 - $80.00
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="detail.html">View product</a></div>
+
+                        
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top" 
+                            src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">Fancy Product</h5>
+                                    <!-- Product price-->
+                                    $40.00 - $80.00
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="detail.html">View product</a></div>
+
+                        
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top" 
+                            src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">Fancy Product</h5>
+                                    <!-- Product price-->
+                                    $40.00 - $80.00
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="detail.html">View product</a></div>
+
+                        
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </section>
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="{% static 'app/js/scripts.js' %}"></script>
+        <!-- Comment image preview -->
+        <script>
+            function previewCommentImage(event) {
+                const file = event.target.files[0];
+                const preview = document.getElementById('imagePreview');
+                const previewImg = document.getElementById('imagePreviewImg');
+                if (file) {
+                    previewImg.src = URL.createObjectURL(file);
+                    preview.style.display = 'block';
+                } else {
+                    preview.style.display = 'none';
+                }
+            }
+        </script>
+    </body>
+</html>
