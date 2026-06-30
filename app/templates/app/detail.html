@@ -196,6 +196,35 @@
                 border: 1px dashed #dee2e6;
                 border-radius: 14px;
             }
+
+            /* Nested replies */
+            .comment-replies {
+                margin-left: 2.5rem;
+                border-left: 2px solid #eef0f2;
+                padding-left: 1rem;
+            }
+            .comment-reply-btn {
+                background: none;
+                border: none;
+                padding: 0;
+                font-size: 0.78rem;
+                font-weight: 600;
+                color: #198754;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.3rem;
+                cursor: pointer;
+                transition: color 0.2s ease-in-out;
+            }
+            .comment-reply-btn:hover {
+                color: #146c43;
+            }
+            .reply-form {
+                background: #f8f9fa;
+                border: 1px solid #eef0f2;
+                border-radius: 10px;
+                padding: 1rem;
+            }
         </style>
     </head>
     <body>
@@ -280,26 +309,11 @@
                     <div class="comments-section">
                         <h2 class="comments-title text-center">
                             Latest comments
-                            <span class="count">({{product.comments.count}})</span>
+                            <span class="count">({{comments.count}})</span>
                         </h2>
 
-                        {% for comment in product.comments.all %}
-                            <div class="comment-card">
-                                <div class="comment-header">
-                                    <div class="comment-avatar">{{ comment.name|first }}</div>
-                                    <div class="comment-meta">
-                                        <p class="comment-name">{{ comment.name }}</p>
-                                        <span class="comment-email">{{ comment.email }}</span>
-                                    </div>
-                                    <span class="comment-rating">
-                                        <i class="bi bi-star-fill"></i>{{ comment.rating }}
-                                    </span>
-                                </div>
-                                <p class="comment-message">{{ comment.message }}</p>
-                                <span class="comment-date">
-                                    <i class="bi bi-clock"></i>{{ comment.created_at }}
-                                </span>
-                            </div>
+                        {% for comment in comments %}
+                            {% include 'app/_comment.html' with comment=comment level=0 %}
                         {% empty %}
                             <div class="comments-empty">
                                 <i class="bi bi-chat-dots fs-3 d-block mb-2"></i>
@@ -369,7 +383,7 @@
                                             <i class="bi bi-cloud-arrow-up"></i>
                                             <span>Click to upload</span>
                                             <small class="text-muted d-block mt-1">PNG, JPG up to 5MB</small>
-                                            <input type="file" name="image" id="commentImage" accept="image/*" onchange="previewCommentImage(event)">
+                                            <input type="file" name="file" id="commentImage" accept="image/*" onchange="previewCommentImage(event)">
                                         </label>
                                         <div class="image-preview" id="imagePreview">
                                             <img id="imagePreviewImg" src="" alt="Preview">
