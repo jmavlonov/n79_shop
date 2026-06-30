@@ -1,5 +1,5 @@
-from django.shortcuts import render,get_object_or_404
-from app.models import Category, Product
+from django.shortcuts import render,get_object_or_404,redirect
+from app.models import Category, Product,Comment
 # Create your views here.
 
 
@@ -27,3 +27,19 @@ def product_detail(request,pk):
         'product':product
     }
     return render(request,'app/detail.html',context)
+
+
+def add_comment(request,pk):
+    product = get_object_or_404(Product,id = pk)
+    # comments field
+    name = request.POST.get("name","")
+    email = request.POST.get("email","")
+    message = request.POST.get("message","")
+    image = request.FILES.get("image","")
+    rating = request.POST.get("rating","")
+    comment = Comment(name=name,email=email,message=message,file=image,rating=rating)
+    comment.product = product
+    comment.save()
+    return redirect('detail',pk)
+
+

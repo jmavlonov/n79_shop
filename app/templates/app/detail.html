@@ -72,6 +72,37 @@
                 object-fit: cover;
             }
 
+            /* Form floating overrides */
+            .form-floating .form-control:focus {
+                border-color: #198754;
+                box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.15);
+            }
+            .form-floating label {
+                color: #8a929b;
+            }
+
+            /* Rating card */
+            .rating-card {
+                background: #f8f9fa;
+                min-height: 80px;
+            }
+            .rating-label {
+                font-size: 0.8rem;
+                color: #6c757d;
+                min-height: 1.2em;
+            }
+
+            /* Submit button */
+            .btn-comment-submit {
+                background: linear-gradient(135deg, #212529, #343a40);
+                border: none;
+                letter-spacing: 0.03em;
+                transition: opacity 0.2s;
+            }
+            .btn-comment-submit:hover {
+                opacity: 0.88;
+            }
+
             /* Comments list */
             .comments-section {
                 max-width: 760px;
@@ -278,59 +309,81 @@
                     </div>
                 </div>
 
-                <div class="col-8 offset-2 mt-5">
-                   
-                    <div class=" p-5">
-                        <div class="text-center">
-                            <h3>Add Comment</h3>
-                        </div>
-                    
-                    <form>
-                        <div class="form-group mb-3">
-                          <label for="formGroupExampleInput">Your name</label>
-                          <input type="text" class="form-control"  placeholder="Your name">
-                        </div>
-                        <div class="form-group mb-3">
-                          <label for="formGroupExampleInput2">Your email</label>
-                          <input type="text" class="form-control" placeholder="Your email">
-                        </div>
+                <div class="col-11 col-md-10 offset-md-1 mt-5 mb-5">
+                    <div class="card border-0 shadow rounded-4 overflow-hidden">
 
-                        <div class="form-group mb-3">
-                            <label for="formGroupExampleInput2">Your comment</label>
-                           <textarea name="" class="form-control" id="" cols="30" rows="10"></textarea>
-                          </div>
-
-                        <div class="form-group mb-3">
-                            <label class="d-block">Your rating</label>
-                            <div class="star-rating">
-                                <input type="radio" id="star5" name="rating" value="5"><label for="star5"><i class="bi bi-star-fill"></i></label>
-                                <input type="radio" id="star4" name="rating" value="4"><label for="star4"><i class="bi bi-star-fill"></i></label>
-                                <input type="radio" id="star3" name="rating" value="3"><label for="star3"><i class="bi bi-star-fill"></i></label>
-                                <input type="radio" id="star2" name="rating" value="2"><label for="star2"><i class="bi bi-star-fill"></i></label>
-                                <input type="radio" id="star1" name="rating" value="1"><label for="star1"><i class="bi bi-star-fill"></i></label>
+                        <div class="card-header bg-dark text-white py-4 px-4 px-md-5 border-0">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                                     style="background:rgba(255,255,255,0.1); width:48px; height:48px;">
+                                    <i class="bi bi-chat-quote-fill fs-5"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0 fw-bold">Leave a Comment</h5>
+                                    <small class="text-white-50">Share your experience with this product</small>
+                                </div>
                             </div>
-                          </div>
+                        </div>
 
-                        <div class="form-group mb-3">
-                            <label class="d-block">Add a photo</label>
-                            <label for="commentImage" class="image-upload-box w-100">
-                                <i class="bi bi-cloud-arrow-up"></i>
-                                <span>Click to upload an image</span>
-                                <input type="file" id="commentImage" accept="image/*" onchange="previewCommentImage(event)">
-                            </label>
-                            <div class="image-preview" id="imagePreview">
-                                <img id="imagePreviewImg" src="" alt="Preview">
-                            </div>
-                          </div>
+                        <div class="card-body p-4 p-md-5">
+                            <form method="post" action="{% url 'add_comment' product.id %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" name="name" class="form-control rounded-3" id="commentName" placeholder="Your name">
+                                            <label for="commentName"><i class="bi bi-person me-2 text-muted"></i>Your name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="email" name="email" class="form-control rounded-3" id="commentEmail" placeholder="your@email.com">
+                                            <label for="commentEmail"><i class="bi bi-envelope me-2 text-muted"></i>Your email</label>
+                                        </div>
+                                    </div>
+                                </div>
 
-                          <div class="form-group mb-3">
+                                <div class="form-floating mb-4">
+                                    <textarea class="form-control rounded-3" name="message" placeholder="Write your comment..."
+                                              id="commentText" style="height:130px; resize:none;"></textarea>
+                                    <label for="commentText"><i class="bi bi-pencil me-2 text-muted"></i>Your comment</label>
+                                </div>
 
-                            <input type="text" class="btn btn-success" value="Send">
-                          </div>
-                      </form>
+                                <div class="row g-3 mb-4 align-items-start">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold text-muted small text-uppercase">Your Rating</label>
+                                        <div class="rating-card p-3 rounded-3 border d-flex flex-column align-items-center">
+                                            <div class="star-rating mb-1">
+                                                <input type="radio" id="star5" name="rating" value="5"><label for="star5"><i class="bi bi-star-fill"></i></label>
+                                                <input type="radio" id="star4" name="rating" value="4"><label for="star4"><i class="bi bi-star-fill"></i></label>
+                                                <input type="radio" id="star3" name="rating" value="3"><label for="star3"><i class="bi bi-star-fill"></i></label>
+                                                <input type="radio" id="star2" name="rating" value="2"><label for="star2"><i class="bi bi-star-fill"></i></label>
+                                                <input type="radio" id="star1" name="rating" value="1"><label for="star1"><i class="bi bi-star-fill"></i></label>
+                                            </div>
+                                            <small class="rating-label">Select a rating</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold text-muted small text-uppercase">Attach Photo</label>
+                                        <label for="commentImage" class="image-upload-box w-100">
+                                            <i class="bi bi-cloud-arrow-up"></i>
+                                            <span>Click to upload</span>
+                                            <small class="text-muted d-block mt-1">PNG, JPG up to 5MB</small>
+                                            <input type="file" name="image" id="commentImage" accept="image/*" onchange="previewCommentImage(event)">
+                                        </label>
+                                        <div class="image-preview" id="imagePreview">
+                                            <img id="imagePreviewImg" src="" alt="Preview">
+                                        </div>
+                                    </div>
+                                </div>
 
+                                <button type="submit" class="btn btn-comment-submit btn-dark w-100 py-3 rounded-3 fw-semibold d-flex align-items-center justify-content-center gap-2">
+                                    <i class="bi bi-send-fill"></i>
+                                    Save
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                      
                 </div>
             </div>
         </div>
@@ -446,7 +499,6 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="{% static 'app/js/scripts.js' %}"></script>
-        <!-- Comment image preview -->
         <script>
             function previewCommentImage(event) {
                 const file = event.target.files[0];
@@ -459,6 +511,13 @@
                     preview.style.display = 'none';
                 }
             }
+
+            const ratingLabels = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
+            document.querySelectorAll('.star-rating input').forEach(input => {
+                input.addEventListener('change', function () {
+                    document.querySelector('.rating-label').textContent = ratingLabels[this.value];
+                });
+            });
         </script>
     </body>
 </html>
