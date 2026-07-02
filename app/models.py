@@ -1,11 +1,23 @@
 from django.db import models
 from decimal import Decimal
 
+from django.core.validators import RegexValidator
 from django.templatetags.static import static
 from app.utils import product_image_path
+
+
+
 import uuid
 # Create your models here.
 
+
+
+
+
+uz_phone_validator = RegexValidator(
+    regex=r'^\+998\d{9}$',
+    message="Telefon raqami +998XXXXXXXXX ko'rinishida bo'lishi kerak (masalan +998901234567).",
+)
 
 
 
@@ -95,7 +107,7 @@ class Comment(models.Model):
 class Order(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=150)
-    phone = models.CharField(max_length=13)
+    phone = models.CharField(max_length=13, validators=[uz_phone_validator])
     quantity = models.PositiveSmallIntegerField(default=1)
     product = models.ForeignKey(Product,
                                 on_delete=models.SET_NULL,

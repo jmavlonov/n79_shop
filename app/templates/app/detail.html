@@ -225,9 +225,92 @@
                 border-radius: 10px;
                 padding: 1rem;
             }
+
+            /* Toast notifications (Django messages) */
+            .app-toast-container {
+                position: fixed;
+                top: 1.25rem;
+                right: 1.25rem;
+                z-index: 1080;
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+                width: 360px;
+                max-width: calc(100vw - 2rem);
+                pointer-events: none;
+            }
+            .app-toast {
+                pointer-events: auto;
+                display: flex;
+                align-items: flex-start;
+                gap: 0.75rem;
+                padding: 0.9rem 1rem;
+                border-radius: 12px;
+                background: #fff;
+                border: 1px solid rgba(0, 0, 0, 0.06);
+                border-left: 4px solid var(--toast-accent, #6c757d);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+                animation: toast-in 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+                transition: opacity 0.4s ease, transform 0.4s ease;
+            }
+            .app-toast.hide {
+                opacity: 0;
+                transform: translateX(120%);
+            }
+            .app-toast .toast-icon {
+                font-size: 1.35rem;
+                line-height: 1;
+                color: var(--toast-accent, #6c757d);
+                flex-shrink: 0;
+            }
+            .app-toast .toast-body {
+                flex: 1;
+                font-size: 0.925rem;
+                color: #212529;
+                line-height: 1.35;
+            }
+            .app-toast .toast-close {
+                background: none;
+                border: none;
+                color: #adb5bd;
+                font-size: 1.1rem;
+                line-height: 1;
+                padding: 0;
+                cursor: pointer;
+                transition: color 0.2s ease;
+            }
+            .app-toast .toast-close:hover {
+                color: #495057;
+            }
+            .app-toast.toast-success { --toast-accent: #198754; }
+            .app-toast.toast-warning { --toast-accent: #ffc107; }
+            .app-toast.toast-error   { --toast-accent: #dc3545; }
+            .app-toast.toast-info    { --toast-accent: #0d6efd; }
+            @keyframes toast-in {
+                from { opacity: 0; transform: translateX(120%); }
+                to   { opacity: 1; transform: translateX(0); }
+            }
         </style>
     </head>
     <body>
+        <!-- Toast notifications (Django messages) -->
+        {% if messages %}
+        <div class="app-toast-container">
+            {% for message in messages %}
+            <div class="app-toast toast-{{ message.level_tag }}" role="alert">
+                <span class="toast-icon">
+                    {% if message.level_tag == 'success' %}<i class="bi bi-check-circle-fill"></i>
+                    {% elif message.level_tag == 'warning' %}<i class="bi bi-exclamation-triangle-fill"></i>
+                    {% elif message.level_tag == 'error' %}<i class="bi bi-x-circle-fill"></i>
+                    {% else %}<i class="bi bi-info-circle-fill"></i>{% endif %}
+                </span>
+                <div class="toast-body">{{ message }}</div>
+                <button type="button" class="toast-close" aria-label="Close">&times;</button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container px-4 px-lg-5">
@@ -276,7 +359,7 @@
                         </div>
                         <p class="lead">{{product.description}}</p>
                         <div class="d-flex">
-                            <form method="post" action="{% url 'order_view' product.id %}">
+                            <form method="post" action="{% url 'order_view' product.id %}" id="orderForm">
                                 {%csrf_token%}
                                 <div class="form-group">
                                     <h2>Place an order</h2>
@@ -286,26 +369,24 @@
                                   <input type="text" name="name" class="form-control"  placeholder="Your name">
                                 </div>
                                 <div class="form-group mb-3">
-                                  <label for="formGroupExampleInput2">Your phone</label>
-                                  <input type="text" name="phone" class="form-control" placeholder="Your phone">
+                                  <label for="phoneLocal">Your phone</label>
+                                  <div class="input-group">
+                                    <span class="input-group-text">+998</span>
+                                    <input type="tel" id="phoneLocal" class="form-control"
+                                           pattern="\d{9}"
+                                           maxlength="9"
+                                           inputmode="numeric"
+                                           placeholder="901234567"
+                                           title="Operator kodi va raqam — 9 ta raqam, masalan: 901234567"
+                                           required>
+                                  </div>
+                                  <input type="hidden" name="phone" id="phoneFull">
                                 </div>
                                 <div class="form-group mb-3">
                                   <label for="formGroupExampleInput2">Stock</label>
                                   <input type="number" name="quantity" class="form-control" placeholder="Stock...">
                                 </div>
 
-                                <div class="form-group mb-3">
-                                    {% if messages %}
-                                        <ul class="messages">
-                                            {% for message in messages %}
-                                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                                            {% endfor %}
-                                        </ul>
-                                    {% endif %}
-                                </div>
-    
-    
-        
                                 <div class="form-group mb-3">
                                     <input type="submit" class="btn btn-success" value="Send">
                                 </div>
@@ -528,6 +609,31 @@
         <!-- Core theme JS-->
         <script src="{% static 'app/js/scripts.js' %}"></script>
         <script>
+            // Toast notifications: manual close + auto-dismiss
+            document.querySelectorAll('.app-toast').forEach(function (toast) {
+                function dismiss() {
+                    toast.classList.add('hide');
+                    setTimeout(function () { toast.remove(); }, 400);
+                }
+                toast.querySelector('.toast-close').addEventListener('click', dismiss);
+                setTimeout(dismiss, 5000);
+            });
+
+            // Order phone: faqat raqam kiritish + submitda +998 prefiks qo'shish
+            (function () {
+                const local = document.getElementById('phoneLocal');
+                const full = document.getElementById('phoneFull');
+                const orderForm = document.getElementById('orderForm');
+                if (local && full && orderForm) {
+                    local.addEventListener('input', function () {
+                        local.value = local.value.replace(/\D/g, '').slice(0, 9);
+                    });
+                    orderForm.addEventListener('submit', function () {
+                        full.value = '+998' + local.value;
+                    });
+                }
+            })();
+
             function previewCommentImage(event) {
                 const file = event.target.files[0];
                 const preview = document.getElementById('imagePreview');

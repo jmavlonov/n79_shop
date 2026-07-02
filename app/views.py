@@ -92,6 +92,6 @@ def order_view(request,pk):
                 print('++++++++++++++')
                 # add message success info
         else:
-            print('Form is invalid')
-        
+            messages.error(request, "Telefon raqamini to'g'ri kiriting: +998XXXXXXXXX")
+
     return redirect('detail',pk)
