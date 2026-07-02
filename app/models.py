@@ -3,6 +3,7 @@ from decimal import Decimal
 
 from django.templatetags.static import static
 from app.utils import product_image_path
+import uuid
 # Create your models here.
 
 
@@ -91,3 +92,20 @@ class Comment(models.Model):
         return f'{self.email} - {self.message}'
     
     
+class Order(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=150)
+    phone = models.CharField(max_length=13)
+    quantity = models.PositiveSmallIntegerField(default=1)
+    product = models.ForeignKey(Product,
+                                on_delete=models.SET_NULL,
+                                related_name='orders',
+                                null=True,
+                                blank=True
+                                )
+    created_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f'{self.name} - {self.phone}'
+    
+    class Meta:
+        db_table = 'orders'

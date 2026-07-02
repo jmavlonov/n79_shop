@@ -276,25 +276,39 @@
                         </div>
                         <p class="lead">{{product.description}}</p>
                         <div class="d-flex">
-                            <form>
+                            <form method="post" action="{% url 'order_view' product.id %}">
+                                {%csrf_token%}
                                 <div class="form-group">
                                     <h2>Place an order</h2>
                                 </div>
                                 <div class="form-group mb-3">
                                   <label for="formGroupExampleInput">Your name</label>
-                                  <input type="text" class="form-control"  placeholder="Your name">
+                                  <input type="text" name="name" class="form-control"  placeholder="Your name">
                                 </div>
                                 <div class="form-group mb-3">
                                   <label for="formGroupExampleInput2">Your phone</label>
-                                  <input type="text" class="form-control" placeholder="Your phone">
+                                  <input type="text" name="phone" class="form-control" placeholder="Your phone">
                                 </div>
+                                <div class="form-group mb-3">
+                                  <label for="formGroupExampleInput2">Stock</label>
+                                  <input type="number" name="quantity" class="form-control" placeholder="Stock...">
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    {% if messages %}
+                                        <ul class="messages">
+                                            {% for message in messages %}
+                                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </div>
+    
+    
         
-                               
-        
-                                  <div class="form-group mb-3">
-                                   
-                                    <input type="text" class="btn btn-success" value="Send">
-                                  </div>
+                                <div class="form-group mb-3">
+                                    <input type="submit" class="btn btn-success" value="Send">
+                                </div>
                               </form>
                            
                         </div>

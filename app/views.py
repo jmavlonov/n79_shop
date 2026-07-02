@@ -1,6 +1,9 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from app.models import Category, Product,Comment
-from app.forms import CommentModelForm
+from app.forms import CommentModelForm,OrderModelForm
+from django.contrib import messages
+
+
 # Create your views here.
 
 
@@ -61,3 +64,34 @@ def add_comment(request,pk):
     return redirect('detail',pk)
     
 
+def order_view(request,pk):
+    product = get_object_or_404(Product,id = pk)
+    if request.method == 'POST':
+        form = OrderModelForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.product = product
+            if product.stock < order.quantity:
+                # add message warning info
+                messages.add_message(
+                    request,
+                    messages.WARNING,
+                    "Buyurtmalar soni Skladdagi productlar sonidan ortiq"
+                )
+                print('-----------------')
+
+            else:
+                product.stock -= order.quantity
+                product.save()
+                order.save()
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    f"{order.id} Buyurtma muvaffaqiyatli amalga oshirildi."
+                )
+                print('++++++++++++++')
+                # add message success info
+        else:
+            print('Form is invalid')
+        
+    return redirect('detail',pk)
