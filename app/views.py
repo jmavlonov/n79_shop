@@ -3,6 +3,7 @@ from app.models import Category, Product,Comment
 from app.forms import CommentModelForm,OrderModelForm
 from django.contrib import messages
 from django.db.models import Q
+from app.utils import product_price_filter
 
 
 # Create your views here.
@@ -10,17 +11,20 @@ from django.db.models import Q
 
 def home(request,category_id : int | None = None):
     search_query = request.GET.get("q","")
+    filter_type = request.GET.get("filter_type","")
     categories = Category.objects.all() # select * from categories;
     products = Product.objects.all()
     
     if category_id is not None:
-        products = Product.objects.filter(category = category_id)
-        
-    if search_query is not None:
-        products = Product.objects.filter(Q(name__icontains = search_query) | Q(description__icontains = search_query))
+        products = products.filter(category = category_id)
+
+    if search_query:
+        products = products.filter(Q(name__icontains = search_query) | Q(description__icontains = search_query))
+
     
-    
-    
+    products = product_price_filter(filter_type,products)
+
+
     context = {
         'categories':categories,
         'products':products

@@ -31,7 +31,7 @@
                                 <li><a class="dropdown-item" href="{% url 'home' %}">All Products</a></li>
                                 <li><hr class="dropdown-divider" /></li>
                                 {%for category in categories%}
-                                    <li><a class="dropdown-item" href="{% url 'products_of_category' category.id %}">{{category.title.title}}</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'products_of_category' category.id %}">{{category.title}}</a></li>
                                 {%endfor%}
                             </ul>
                         </li>
@@ -64,15 +64,15 @@
             </div>
             <div class="row">
                 <div class="col-1">
-                    <a class="btn btn-outline-dark mt-auto" href="#"> Expensive </a>
+                    <a class="btn btn-outline-dark mt-auto" href="?filter_type=expensive"> Expensive </a>
                 </div>
 
                 <div class="col-1">
-                    <a class="btn btn-outline-dark mt-auto" href="#"> Cheap </a>
+                    <a class="btn btn-outline-dark mt-auto" href="?filter_type=cheap"> Cheap </a>
                 </div>
 
                 <div class="col-1">
-                    <a class="btn btn-outline-dark mt-auto" href="#"> Likes </a>
+                    <a class="btn btn-outline-dark mt-auto" href="#"> Rating </a>
                 </div>
 
             </div>
