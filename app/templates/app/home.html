@@ -72,7 +72,7 @@
                 </div>
 
                 <div class="col-1">
-                    <a class="btn btn-outline-dark mt-auto" href="#"> Rating </a>
+                    <a class="btn btn-outline-dark mt-auto" href="?filter_type=rating"> Rating </a>
                 </div>
 
             </div>
@@ -95,13 +95,14 @@
                                         <!-- Product name-->
                                         <h5 class="fw-bolder">{{product.name}}</h5>
                                         <!-- Product reviews-->
-                                        <div class="d-flex justify-content-center small text-warning mb-2">
+                                        {% comment %} <div class="d-flex justify-content-center small text-warning mb-2">
                                             <div class="bi-star-fill"></div>
                                             <div class="bi-star-fill"></div>
                                             <div class="bi-star-fill"></div>
                                             <div class="bi-star-fill"></div>
                                             <div class="bi-star-fill"></div>
-                                        </div>
+                                        </div> {% endcomment %}
+                                        Rating : {{product.avg_comment}}<br>
                                         <!-- Product price-->
                                         {% if product.discount %}
                                             <span class="text-muted text-decoration-line-through">{{product.price}}</span>
