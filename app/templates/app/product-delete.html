@@ -1,0 +1,155 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <title>Delete Product - Apelsin</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="{% static 'app/css/styles.css' %}" rel="stylesheet" />
+        <style>
+            body {
+                background: #f8f9fa;
+            }
+            .delete-wrapper {
+                min-height: calc(100vh - 250px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 3rem 1rem;
+            }
+            .delete-card {
+                width: 100%;
+                max-width: 480px;
+                background: #fff;
+                border-radius: 18px;
+                overflow: hidden;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+                border: 1px solid #f0f0f0;
+            }
+            .delete-icon-circle {
+                width: 76px;
+                height: 76px;
+                border-radius: 50%;
+                background: #fdecea;
+                color: #dc3545;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 2.1rem;
+                margin: 2.25rem auto 1rem;
+            }
+            .delete-product-preview {
+                display: flex;
+                align-items: center;
+                gap: 0.9rem;
+                background: #f8f9fa;
+                border: 1px solid #eef0f2;
+                border-radius: 12px;
+                padding: 0.75rem 1rem;
+                margin: 1.25rem 1.75rem 0.5rem;
+            }
+            .delete-product-preview img {
+                width: 56px;
+                height: 56px;
+                object-fit: cover;
+                border-radius: 8px;
+                flex-shrink: 0;
+                background: #fff;
+            }
+            .delete-product-preview .name {
+                font-weight: 600;
+                color: #212529;
+                margin: 0;
+                font-size: 0.98rem;
+            }
+            .delete-product-preview .price {
+                color: #6c757d;
+                font-size: 0.85rem;
+            }
+            .delete-actions {
+                display: flex;
+                gap: 0.75rem;
+                padding: 1.5rem 1.75rem 2rem;
+            }
+            .delete-actions .btn {
+                flex: 1;
+                border-radius: 10px;
+                padding: 0.65rem 1rem;
+                font-weight: 600;
+            }
+            .btn-confirm-delete {
+                --bs-btn-color: #fff;
+                --bs-btn-bg: #dc3545;
+                --bs-btn-border-color: #dc3545;
+                --bs-btn-hover-color: #fff;
+                --bs-btn-hover-bg: #bb2d3b;
+                --bs-btn-hover-border-color: #b02a37;
+                --bs-btn-active-color: #fff;
+                --bs-btn-active-bg: #b02a37;
+                --bs-btn-active-border-color: #a52834;
+                --bs-btn-focus-shadow-rgb: 225, 83, 97;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container px-4 px-lg-5">
+                <a class="navbar-brand" href="{% url 'home' %}">Apelsin</a>
+            </div>
+        </nav>
+
+        <div class="delete-wrapper">
+            <div class="delete-card">
+                <div class="delete-icon-circle">
+                    <i class="bi bi-trash3-fill"></i>
+                </div>
+
+                <div class="text-center px-4">
+                    <h4 class="fw-bold mb-2">Delete this product?</h4>
+                    <p class="text-muted mb-0">
+                        This action cannot be undone. "<strong>{{ product.name }}</strong>" will be permanently removed.
+                    </p>
+                </div>
+
+                <div class="delete-product-preview">
+                    <img src="{{ product.get_image_path }}" alt="{{ product.name }}">
+                    <div>
+                        <p class="name">{{ product.name }}</p>
+                        <span class="price">
+                            {% if product.discount %}
+                                <span class="text-decoration-line-through">{{ product.price }}</span>
+                                {{ product.discounted_price }}
+                            {% else %}
+                                {{ product.price }}
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+
+                <form method="post" class="delete-actions">
+                    {% csrf_token %}
+                    <a href="{% url 'detail' product.id %}" class="btn btn-outline-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-confirm-delete">
+                        <i class="bi bi-trash3 me-1"></i> Yes, Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p></div>
+        </footer>
+
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="{% static 'app/js/scripts.js' %}"></script>
+    </body>
+</html>

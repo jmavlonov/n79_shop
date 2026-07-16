@@ -127,3 +127,16 @@ def create_product(request):
         
     
     return render(request,'app/add-product.html',context=context)
+
+
+
+def delete_product(request,pk):
+    product = get_object_or_404(Product,id = pk)
+    if request.method == "POST":
+        product.delete()
+        return redirect('home')
+    
+    return render(request, "app/product-delete.html", {"product": product})
+    
+    
+
