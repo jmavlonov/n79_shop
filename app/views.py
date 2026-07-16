@@ -1,6 +1,6 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from app.models import Category, Product,Comment
-from app.forms import CommentModelForm,OrderModelForm
+from app.forms import CommentModelForm,OrderModelForm,ProductModelForm
 from django.contrib import messages
 from django.db.models import Q
 from app.utils import product_price_filter
@@ -110,3 +110,20 @@ def order_view(request,pk):
             messages.error(request, "Telefon raqamini to'g'ri kiriting: +998XXXXXXXXX")
 
     return redirect('detail',pk)
+
+def create_product(request):
+    
+    if request.method == "POST":
+        form = ProductModelForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = ProductModelForm()
+        
+    context = {
+        'form':form
+    }
+        
+    
+    return render(request,'app/add-product.html',context=context)

@@ -1,5 +1,5 @@
 from django.forms import ModelForm,Form
-from app.models import Comment, Order
+from app.models import Comment, Order,Product
 
 class CommentModelForm(ModelForm):
     class Meta:
@@ -14,3 +14,8 @@ class OrderModelForm(ModelForm):
         model = Order
         exclude = ('product',)
 
+
+class ProductModelForm(ModelForm):
+    class Meta:
+        model = Product
+        exclude = ('id','created_at','updated_at')
