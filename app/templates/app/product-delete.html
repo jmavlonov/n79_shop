@@ -101,7 +101,7 @@
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container px-4 px-lg-5">
-                <a class="navbar-brand" href="{% url 'home' %}">Apelsin</a>
+                <a class="navbar-brand" href="{% url 'app:home' %}">Apelsin</a>
             </div>
         </nav>
 
@@ -135,7 +135,7 @@
 
                 <form method="post" class="delete-actions">
                     {% csrf_token %}
-                    <a href="{% url 'detail' product.id %}" class="btn btn-outline-secondary">Cancel</a>
+                    <a href="{% url 'app:detail' product.id %}" class="btn btn-outline-secondary">Cancel</a>
                     <button type="submit" class="btn btn-confirm-delete">
                         <i class="bi bi-trash3 me-1"></i> Yes, Delete
                     </button>

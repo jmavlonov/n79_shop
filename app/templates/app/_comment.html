@@ -32,7 +32,7 @@
 
     {% if level < 2 %}
         <div class="collapse mt-3" id="reply-form-{{ comment.id }}">
-            <form method="post" action="{% url 'add_comment' product.id %}" class="reply-form">
+            <form method="post" action="{% url 'app:add_comment' product.id %}" class="reply-form">
                 {% csrf_token %}
                 <input type="hidden" name="parent" value="{{ comment.id }}">
                 <input type="hidden" name="rating" value="1">

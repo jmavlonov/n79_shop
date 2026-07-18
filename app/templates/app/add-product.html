@@ -51,12 +51,12 @@
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container px-4 px-lg-5">
-                <a class="navbar-brand" href="{% url 'home' %}">Apelsin</a>
+                <a class="navbar-brand" href="{% url 'app:home' %}">Apelsin</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'create_product' %}">Add Product</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'app:home' %}">Home</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'app:create_product' %}">Add Product</a></li>
                     </ul>
                 </div>
             </div>
@@ -87,7 +87,7 @@
                                 <h5 class="mb-0"><i class="bi-box-seam me-2"></i>Mahsulot ma'lumotlari</h5>
                             </div>
                             <div class="card-body p-4">
-                                <form method="post" action="{% url 'create_product' %}" enctype="multipart/form-data" novalidate>
+                                <form method="post" action="{% url 'app:create_product' %}" enctype="multipart/form-data" novalidate>
                                     {% csrf_token %}
 
                                     <div class="row g-3">
@@ -160,7 +160,7 @@
                                     <hr class="my-4" />
 
                                     <div class="d-flex justify-content-end gap-2">
-                                        <a href="{% url 'home' %}" class="btn btn-outline-dark">Bekor qilish</a>
+                                        <a href="{% url 'app:home' %}" class="btn btn-outline-dark">Bekor qilish</a>
                                         <button type="submit" class="btn btn-success px-4"><i class="bi-check-lg me-1"></i>Saqlash</button>
                                     </div>
                                 </form>

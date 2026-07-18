@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app.apps.AppConfig',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -111,6 +112,12 @@ USE_I18N = True
 
 USE_TZ = True
 
+from django.contrib.messages import constants as message_constants
+
+MESSAGE_TAGS = {
+    message_constants.ERROR: 'danger',
+}
+
 import os
 
 # Static files (CSS, JavaScript, Images)
@@ -129,3 +136,5 @@ STATICFILE_DIRS = [
 MEDIA_URL  = os.path.join(BASE_DIR,'media/')
 
 MEDIA_ROOT = BASE_DIR / 'media'
+
+AUTH_USER_MODEL = 'users.CustomUser'

@@ -76,7 +76,7 @@ def add_comment(request,pk):
                 if parent.parent is None or parent.parent.parent is None:
                     comment.parent = parent
             comment.save()
-    return redirect('detail',pk)
+    return redirect('app:detail',pk)
     
 
 def order_view(request,pk):
@@ -109,7 +109,7 @@ def order_view(request,pk):
         else:
             messages.error(request, "Telefon raqamini to'g'ri kiriting: +998XXXXXXXXX")
 
-    return redirect('detail',pk)
+    return redirect('app:detail',pk)
 
 def create_product(request):
     
@@ -117,7 +117,7 @@ def create_product(request):
         form = ProductModelForm(request.POST,request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('home')
+            return redirect('app:home')
     else:
         form = ProductModelForm()
         
@@ -134,7 +134,7 @@ def delete_product(request,pk):
     product = get_object_or_404(Product,id = pk)
     if request.method == "POST":
         product.delete()
-        return redirect('home')
+        return redirect('app:home')
     
     return render(request, "app/product-delete.html", {"product": product})
     
