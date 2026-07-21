@@ -6,6 +6,7 @@ from django.db.models import Q
 from app.utils import product_price_filter
 from django.db.models import Avg, Value
 from django.db.models.functions import Coalesce
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -111,8 +112,9 @@ def order_view(request,pk):
 
     return redirect('app:detail',pk)
 
-def create_product(request):
-    
+
+@login_required
+def create_product(request): 
     if request.method == "POST":
         form = ProductModelForm(request.POST,request.FILES)
         if form.is_valid():

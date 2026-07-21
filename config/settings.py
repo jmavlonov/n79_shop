@@ -133,8 +133,12 @@ STATICFILE_DIRS = [
 
 # python manage.py collectstatic
 
-MEDIA_URL  = os.path.join(BASE_DIR,'media/')
+MEDIA_URL  = '/media/'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
 AUTH_USER_MODEL = 'users.CustomUser'
+
+LOGIN_URL = 'users:login'
+LOGIN_REDIRECT_URL = 'app:home'
+LOGOUT_REDIRECT_URL = 'app:home'
